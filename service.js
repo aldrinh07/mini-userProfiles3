@@ -4,9 +4,14 @@ app.service('mainService', function($http, $q) {
 
 
   this.getUsers = function() {
-    return $http({
-        method: 'GET',
-        url: 'http://reqr.es/api/users?page=1'
+    var deferred = $q.defer();
+    $http.get('http://reqr.es/api/users?page=1').then(function(response) {
+        response = response.data.data
+        for(var i = 0; i < response.length; i++) {
+            response[i].last_name = 'Ralf'
+        }
+        deferred.resolve(response)
     })
+    return deferred.promise;
   }
 });
